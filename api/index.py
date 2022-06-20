@@ -1,7 +1,11 @@
+from ics import Calendar
+import requests
+
 from flask import Flask, Response
 app = Flask(__name__)
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
+@app.route('/')
+def index():
+    url = "https://urlab.be/events/urlab.ics"
+    c = Calendar(requests.get(url).text)
+    return Response(c, mimetype="text/calendar")
